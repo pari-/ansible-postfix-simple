@@ -1,0 +1,12 @@
+---
+
+- hosts: "all"
+  vars:
+    postfix_simple_password: "yourVerySecretPassword"
+    postfix_simple_user: "yourUser"
+    postfix_simple_config:
+      relayhost: "smtp.server.address:port"
+  roles:
+    - role: "ansible-postfix-simple"
+      tags:
+        - "postfix-simple"

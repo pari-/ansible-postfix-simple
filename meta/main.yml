@@ -1,0 +1,17 @@
+---
+
+galaxy_info:
+  author: "Patrick Ringl"
+  dependencies: []
+  description: "An Ansible role which installs and configures postfix for simple eMail sending through SMTP"
+  galaxy_tags:
+    - "postfix"
+    - "email"
+    - "smtp"
+  license: "MIT"
+  min_ansible_version: "2.2.3.0"
+  platforms:
+    - name: "Debian"
+      versions:
+        - "jessie"
+        - "stretch"

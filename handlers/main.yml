@@ -1,0 +1,7 @@
+---
+
+- name: "restart postfix"
+  service:
+    name: "{{ postfix_simple_service_name }}"
+    state: "restarted"
+    use: "systemd"

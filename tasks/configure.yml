@@ -1,0 +1,45 @@
+---
+
+- name: "extend configuration file"
+  lineinfile:
+    create: "yes"
+    line: "{{ item }} = {{ _postfix_simple_merged_config[item] }}"
+    dest: "{{ postfix_simple_config_files['maincf'] }}"
+    regexp: "^{{ item }}.*"
+    state: "present"
+  with_items:
+    - "{{ _postfix_simple_merged_config | sort }}"
+  notify:
+    - "restart postfix"
+
+- name: "generate SASL DB"
+  template:
+    src: "etc/postfix/sasl/passwd.j2"
+    dest: "{{ postfix_simple_config_files['saslpasswd'] }}"
+  register: "_generate_sasl_db"
+
+- name: "hash the SASL DB"
+  command: "postmap {{ postfix_simple_config_files['saslpasswd'] }}"
+  notify:
+    - "restart postfix"
+  when:
+    - "_generate_sasl_db|changed"
+
+- name: "adapt SASL DB permissions"
+  file:
+    path: "{{ postfix_simple_config_files['saslpasswd'] | dirname }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: 0600
+    recurse: True
+
+- name: "ensure the service is started and enabled at boot"
+  service:
+    name: "{{ postfix_simple_service_name }}"
+    state: "started"
+    enabled: "yes"
+    use: "systemd"
+
+- name: "flush all handlers"
+  meta: "flush_handlers"

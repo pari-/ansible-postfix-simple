@@ -1,0 +1,39 @@
+---
+
+postfix_simple_cache_valid_time: 3600
+postfix_simple_config_files:
+  maincf: "/etc/postfix/main.cf"
+  saslpasswd: "/etc/postfix/sasl/passwd"
+postfix_simple_config_defaults:
+  append_dot_mydomain: "no"
+  biff: "no"
+  compatibility_level: "2"
+  inet_interfaces: "all"
+  inet_protocols: "ipv4"
+  mailbox_size_limit: "0"
+  mydestination: "$myhostname, {{ ansible_fqdn }}, localhost"
+  mynetworks: "127.0.0.1/32 {{ ansible_default_ipv4['address'] }}/32"
+  myorigin: "$myhostname"
+  myhostname: "{{ ansible_fqdn }}"
+  readme_directory: "no"
+  recipient_delimiter: "+"
+  relayhost: "doesNotExist:123"
+  smtp_sasl_auth_enable: "yes"
+  smtp_sasl_password_maps: "hash:{{ postfix_simple_config_files['saslpasswd'] }}"
+  smtp_sasl_security_options: "noanonymous"
+  smtpd_banner: "$myhostname ESMTP $mail_name (Debian/GNU)"
+_postfix_simple_merged_config: "{{ postfix_simple_config_defaults | combine(postfix_simple_config) }}"
+postfix_simple_default_release: "{{ ansible_distribution_release|lower }}"
+postfix_simple_package_list:
+  - "libsasl2-modules"
+  - "postfix"
+postfix_simple_pre_default_release: "{{ postfix_simple_default_release }}"
+postfix_simple_pre_package_list:
+  - "apt-transport-https"
+  - "ca-certificates"
+postfix_simple_repo_list: []
+postfix_simple_service_name: "postfix"
+postfix_simple_supported_distro_list:
+  - "jessie"
+  - "stretch"
+postfix_simple_update_cache: "yes"
