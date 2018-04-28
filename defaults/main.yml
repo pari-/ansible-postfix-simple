@@ -34,6 +34,5 @@ postfix_simple_pre_package_list:
 postfix_simple_repo_list: []
 postfix_simple_service_name: "postfix"
 postfix_simple_supported_distro_list:
-  - "jessie"
   - "stretch"
 postfix_simple_update_cache: "yes"
